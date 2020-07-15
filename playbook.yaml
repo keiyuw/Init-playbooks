@@ -1,0 +1,45 @@
+- hosts: all
+
+  vars_prompt:
+    - name: wakatime_api_key
+      prompt: Wakatime API key
+      private: yes
+
+  tasks:
+    - name: packages
+      include_role:
+        name: packages
+        apply:
+          tags: [packages]
+      tags: always
+
+    - name: dotfiles
+      include_role:
+        name: dotfiles
+        apply:
+          tags: [dotfiles]
+      tags: always
+
+    - name: zsh
+      include_role:
+        name: zsh
+        apply:
+          tags: [zsh]
+      tags: always
+
+    - name: gpg
+      include_role:
+        name: gpg
+        apply:
+          tags: [gpg]
+      tags: always
+
+    # Don't run neovim role when on debian, because neovim isn't installed on
+    # debian systems.
+    - name: neovim
+      include_role:
+        name: neovim
+        apply:
+          tags: [neovim]
+      when: ansible_facts["os_family"]|lower != "debian"
+      tags: always

@@ -1,0 +1,9 @@
+- name: import gpg public key
+  command:
+    cmd: gpg --import
+    stdin: "{{ lookup('file', 'pubkey.asc') }}"
+
+- name: import gpg ownertrust
+  command:
+    cmd: gpg --import-ownertrust
+    stdin: "{{ lookup('file', 'ownertrust.db') }}"

@@ -1,0 +1,11 @@
+- name: archlinux packages
+  import_tasks: archlinux.yaml
+  when: ansible_facts["os_family"]|lower == "archlinux"
+
+- name: debian packages
+  import_tasks: debian.yaml
+  when: ansible_facts["os_family"]|lower == "debian"
+
+- name: void packages
+  import_tasks: void.yaml
+  when: ansible_facts["os_family"]|lower == "void"

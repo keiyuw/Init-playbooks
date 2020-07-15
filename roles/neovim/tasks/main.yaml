@@ -1,0 +1,45 @@
+- name: install .config/nvim
+  copy:
+    src: nvim
+    dest: ~/.config/
+    mode: preserve
+  tags: dotfiles
+
+- name: install dein
+  command:
+    cmd: sh ~/.config/nvim/dein-install.sh ~/.vim/dein
+    creates: ~/.vim/dein
+  tags: neovim_plugins
+
+- name: install python3 pynvim
+  become: true
+  pip:
+    name: pynvim
+    executable: pip3
+  tags:
+    - packages
+    - pip
+
+- name: install python2 pynvim
+  become: true
+  pip:
+    name: pynvim
+    executable: pip2
+  tags:
+    - packages
+    - pip
+
+- name: install nodejs neovim
+  become: true
+  npm:
+    name: neovim
+    global: yes
+  tags:
+    - packages
+    - npm
+
+- name: install dein plugins
+  shell:
+    cmd: nvim "+call dein#install()" +UpdateRemotePlugins +qall && touch ~/.vim/.dein-installed
+    creates: ~/.vim/.dein-installed
+  tags: neovim_plugins

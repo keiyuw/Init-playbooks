@@ -1,0 +1,6 @@
+antibody:
+  # Release version from GitHub releases
+  version: v4.2.0
+
+  # SHA256 checksum of antibody binary within Linux x86_64 tarball.
+  sha256sum: 1202a4d70e623bc9ab9b92547d989f4838038d68125f157cd04d55c09cdac65f

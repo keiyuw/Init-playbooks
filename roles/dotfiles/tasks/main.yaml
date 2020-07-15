@@ -1,0 +1,34 @@
+- name: install .gitconfig
+  copy:
+    src: .gitconfig
+    dest: ~/.gitconfig
+    mode: preserve
+  tags: git
+
+- name: install .ssh/
+  copy:
+    src: .ssh
+    dest: ~/
+    mode: preserve
+  tags: ssh
+
+- name: install .tmux.conf
+  template:
+    src: .tmux.conf.j2
+    dest: ~/.tmux.conf
+    mode: preserve
+  tags: tmux
+
+- name: install .tmux.theme.conf
+  copy:
+    src: .tmux.theme.conf
+    dest: ~/.tmux.theme.conf
+    mode: preserve
+  tags: tmux
+
+- name: install .wakatime.cfg
+  template:
+    src: .wakatime.cfg.j2
+    dest: ~/.wakatime.cfg
+    mode: preserve
+  tags: wakatime

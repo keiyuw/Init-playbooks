@@ -1,0 +1,11 @@
+- name: upgrade system using apt
+  become: yes
+  apt:
+    update_cache: yes
+    upgrade: yes
+
+- name: install packages using apt
+  become: yes
+  apt:
+    pkg: "{{ debian_pkgs || flatten }}"
+    state: present

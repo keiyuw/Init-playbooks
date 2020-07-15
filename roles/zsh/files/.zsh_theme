@@ -1,0 +1,62 @@
+# Custom ZSH theme based on Avit
+
+PROMPT='
+$(_user_host)$(_current_dir)$(git_prompt_info)
+%(?.%{$fg[green]%}.%{$resetcolor%}%{$fg[red]%})λ%{$reset_color%} '
+
+PROMPT2='%_> '
+
+#RPROMPT='%{$(echotc UP 1)%}%*%{$(echotc DO 1)%}'
+
+function _current_dir() {
+  local _max_pwd_length="65"
+  if [[ $(echo -n $PWD | wc -c) -gt ${_max_pwd_length} ]]; then
+    echo "%{$fg_bold[blue]%}%-2~/.../%3~%{$reset_color%} "
+  else
+    echo "%{$fg_bold[blue]%}%~%{$reset_color%} "
+  fi
+}
+
+# Outputs current branch info in prompt format
+# Adapted from robyrussell/oh-my-zsh/lib/git.zsh
+function git_prompt_info() {
+  local ref
+  ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
+  ref=$(command git rev-parse --short HEAD 2> /dev/null) || return 0
+  echo "%{$fg[green]%}${ref#refs/heads/}$(parse_git_dirty)%{$reset_color%}"
+}
+
+# Checks if working tree is dirty
+# Adapted from robyrussell/oh-my-zsh/lib/git.zsh
+function parse_git_dirty() {
+  local STATUS=$(command git status --porcelain --ignore-submodule=dirty 2> /dev/null | tail -n1)
+  if [[ -n $STATUS ]]; then
+    echo " %{$fg[red]%}✗%{$reset_color%}"
+  else
+    echo " %{$fg[green]%}✔%{$reset_color%}"
+  fi
+}
+
+function _user_host() {
+  local color="cyan"
+  local me=""
+  if [[ -n $SSH_CONNECTION || "$SSH_AUTH_SOCK" == "/tmp/coder-ssh-agent.sock" ]]; then
+    color="yellow"
+    me="%n@%m"
+  elif [[ $LOGNAME != $USER || $USER == "root" ]]; then
+    color="yellow"
+    me="%n"
+  fi
+  if [[ $USER == "root" ]]; then
+    color="red"
+  fi
+  if [[ -n $me ]]; then
+    echo "%{$fg[$color]%}$me%{$reset_color%} "
+  fi
+}
+
+# LS colors, made with https://geoff.greer.fm/lscolors/
+export LSCOLORS="exfxcxdxbxegedabagacad"
+export LS_COLORS='di=34;40:ln=35;40:so=32;40:pi=33;40:ex=31;40:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:'
+export GREP_COLOR='1;33'
+

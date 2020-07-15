@@ -1,0 +1,11 @@
+all:
+  children:
+    workstations:
+      hosts:
+        mars:
+        phobos:
+    servers:
+      hosts:
+        fuyumi:
+        kasumi:
+        localhost:

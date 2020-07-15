@@ -1,0 +1,53 @@
+# automatically renumber tmux windows
+set -g renumber-windows on
+
+{% if role_workstation is defined and role_workstation %}
+# set prefix to ctrl+a
+unbind C-b
+set -g prefix C-a
+bind C-a send-prefix
+{% else %}
+# hide the status bar
+set -g status off
+{% endif %}
+
+# allow mouse scrolling
+set -g mouse on
+
+# make keys work nicely in vim
+set -gw mode-keys vi
+
+# disable automatic window renaming
+set-window-option -g automatic-rename off
+set-option -g allow-rename off
+
+# set terminal emulator window title
+set -g set-titles on
+set -g set-titles-string "#W"
+
+# start windows and panes at 1, not 0
+set -g base-index 1
+set -g pane-base-index 1
+
+# put the bar at the top
+#set-option -g status-position top
+
+# reload ~/.tmux.conf when r is pressed
+bind r source-file ~/.tmux.conf \; display "Config reloaded!"
+
+# splits in the same pwd
+bind '"' split-window -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+
+# paste binds
+bind P paste-buffer
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+bind-key -T copy-mode-vi y send-keys -X copy-selection
+bind-key -T copy-mode-vi r send-keys -X rectangle-toggle
+
+# yeah
+set -g default-shell "/bin/zsh"
+set -g default-terminal "screen-256color"
+set -s escape-time 0
+
+source-file "${HOME}/.tmux.theme.conf"

@@ -1,0 +1,11 @@
+- name: upgrade system using xbps
+  become: yes
+  xbps:
+    update_cache: yes
+    upgrade: yes
+
+- name: install packages using xbps
+  become: yes
+  xbps:
+    pkg: "{{ void_pkgs || flatten }}"
+    state: present

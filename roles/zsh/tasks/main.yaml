@@ -1,0 +1,45 @@
+- name: install .zshrc
+  copy:
+    src: .zshrc
+    dest: ~/.zshrc
+    mode: preserve
+  tags: dotfiles
+
+- name: install .zsh_theme
+  copy:
+    src: .zsh_theme
+    dest: ~/.zsh_theme
+    mode: preserve
+  tags: dotfiles
+
+- name: install .zsh_plugins
+  copy:
+    src: .zsh_plugins
+    dest: ~/.zsh_plugins
+    mode: preserve
+  tags: dotfiles
+
+- name: set zsh as default shell
+  become: true
+  shell: "chsh -s $(which zsh) kei0x"
+
+- name: install antibody
+  become: true
+  shell:
+    cmd: |
+      set -e
+      temp_dir=$(mktemp -d)
+      cd "$temp_dir"
+      curl -fsSL "https://github.com/getantibody/antibody/releases/download/{{ antibody.version }}/antibody_Linux_x86_64.tar.gz" | tar -xzf - antibody
+      echo "{{ antibody.sha256sum }}  antibody" | sha256sum -c -
+      mv antibody /usr/local/bin/
+      cd ~
+      rm -r "$temp_dir"
+    creates: /usr/local/bin/antibody
+  tags: antibody
+
+- name: generate .zsh_bundle.sh
+  shell:
+    cmd: antibody bundle < ~/.zsh_plugins > ~/.zsh_bundle.sh
+    creates: ~/.zsh_bundle.sh
+  tags: antibody

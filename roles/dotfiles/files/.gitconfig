@@ -1,0 +1,33 @@
+[user]
+	email = contact@kei0x.com
+	name = Kei0x
+	signingkey = XXXXXX
+
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+
+[gpg]
+	program = /usr/bin/gpg2
+
+[commit]
+	gpgsign = true
+
+[merge]
+	tool = vimdiff
+	conflictstyle = diff3
+
+[rerere]
+	enabled = true
+
+[alias]
+	ap = "add -p"
+	a = "add -A"
+	c = "commit --verbose"
+	d = "diff"
+	s = "status"
+	rc = "rebase --continue"
+
+	as = "! git rebase -i --autosquash master"
+	f = "! git c --fixup $(git log --pretty='%H' -1 --invert-grep --grep 'fixup! ')"
+
+	releasenotes = "! set -u; f() { git log  --no-merges --pretty=format:\"- %h %s\" $1; }; f"

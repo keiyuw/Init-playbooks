@@ -1,0 +1,23 @@
+- name: upgrade system using pacman
+  become: yes
+  pacman:
+    update_cache: yes
+    upgrade: yes
+
+- name: install packages using pacman
+  become: yes
+  pacman:
+    pkg: "{{ archlinux_pkgs | flatten }}"
+    state: present
+
+- name: install yay
+  shell:
+    cmd: |
+      set -e
+      temp_dir=$(mktemp -d)
+      git clone --depth 1 https://aur.archlinux.org/yay.git "$temp_dir"
+      cd "$temp_dir"
+      makepkg --noconfirm -si
+      cd ~
+      rm -r "$temp_dir"
+    creates: /usr/bin/yay
